@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Projetos\\DesafioTecnicoUxcomex\\DesafioTecnicoUxComex\\UxComexGerenciadorPedidos\\UxComexGerenciadorPedidos.csproj": {}
+    "D:\\Projetos\\DesafioTecnicoUxComex\\UxComexGerenciadorPedidos\\UxComexGerenciadorPedidos.csproj": {}
   },
   "projects": {
-    "D:\\Projetos\\DesafioTecnicoUxcomex\\DesafioTecnicoUxComex\\UxComexGerenciadorPedidos\\UxComexGerenciadorPedidos.csproj": {
+    "D:\\Projetos\\DesafioTecnicoUxComex\\UxComexGerenciadorPedidos\\UxComexGerenciadorPedidos.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Projetos\\DesafioTecnicoUxcomex\\DesafioTecnicoUxComex\\UxComexGerenciadorPedidos\\UxComexGerenciadorPedidos.csproj",
+        "projectUniqueName": "D:\\Projetos\\DesafioTecnicoUxComex\\UxComexGerenciadorPedidos\\UxComexGerenciadorPedidos.csproj",
         "projectName": "UxComexGerenciadorPedidos",
-        "projectPath": "D:\\Projetos\\DesafioTecnicoUxcomex\\DesafioTecnicoUxComex\\UxComexGerenciadorPedidos\\UxComexGerenciadorPedidos.csproj",
+        "projectPath": "D:\\Projetos\\DesafioTecnicoUxComex\\UxComexGerenciadorPedidos\\UxComexGerenciadorPedidos.csproj",
         "packagesPath": "C:\\Users\\Luiz Paulo\\.nuget\\packages\\",
-        "outputPath": "D:\\Projetos\\DesafioTecnicoUxcomex\\DesafioTecnicoUxComex\\UxComexGerenciadorPedidos\\obj\\",
+        "outputPath": "D:\\Projetos\\DesafioTecnicoUxComex\\UxComexGerenciadorPedidos\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

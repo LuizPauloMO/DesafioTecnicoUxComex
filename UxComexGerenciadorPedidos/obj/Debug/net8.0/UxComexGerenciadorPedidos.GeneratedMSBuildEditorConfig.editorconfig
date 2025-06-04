@@ -17,71 +17,71 @@ build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = UxComexGerenciadorPedidos
 build_property.RootNamespace = UxComexGerenciadorPedidos
-build_property.ProjectDir = D:\Projetos\DesafioTecnicoUxcomex\DesafioTecnicoUxComex\UxComexGerenciadorPedidos\
+build_property.ProjectDir = D:\Projetos\DesafioTecnicoUxComex\UxComexGerenciadorPedidos\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = D:\Projetos\DesafioTecnicoUxcomex\DesafioTecnicoUxComex\UxComexGerenciadorPedidos
+build_property.MSBuildProjectDirectory = D:\Projetos\DesafioTecnicoUxComex\UxComexGerenciadorPedidos
 build_property._RazorSourceGeneratorDebug = 
 
-[D:/Projetos/DesafioTecnicoUxcomex/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Client/ListClients.cshtml]
+[D:/Projetos/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Client/ListClients.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xpZW50XExpc3RDbGllbnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projetos/DesafioTecnicoUxcomex/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Client/NewClient.cshtml]
+[D:/Projetos/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Client/NewClient.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xpZW50XE5ld0NsaWVudC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projetos/DesafioTecnicoUxcomex/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Client/UpdateClient.cshtml]
+[D:/Projetos/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Client/UpdateClient.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xpZW50XFVwZGF0ZUNsaWVudC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projetos/DesafioTecnicoUxcomex/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Home/Index.cshtml]
+[D:/Projetos/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projetos/DesafioTecnicoUxcomex/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Home/Privacy.cshtml]
+[D:/Projetos/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projetos/DesafioTecnicoUxcomex/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Order/ListOrders.cshtml]
+[D:/Projetos/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Order/ListOrders.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJcTGlzdE9yZGVycy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projetos/DesafioTecnicoUxcomex/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Order/NewOrder.cshtml]
+[D:/Projetos/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Order/NewOrder.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJcTmV3T3JkZXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projetos/DesafioTecnicoUxcomex/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Product/EditProduct.cshtml]
+[D:/Projetos/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Product/EditProduct.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdFxFZGl0UHJvZHVjdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projetos/DesafioTecnicoUxcomex/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Product/ListProducts.cshtml]
+[D:/Projetos/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Product/ListProducts.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdFxMaXN0UHJvZHVjdHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projetos/DesafioTecnicoUxcomex/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Product/NewProduct.cshtml]
+[D:/Projetos/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Product/NewProduct.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdFxOZXdQcm9kdWN0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projetos/DesafioTecnicoUxcomex/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Shared/Error.cshtml]
+[D:/Projetos/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projetos/DesafioTecnicoUxcomex/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Shared/_ValidationScriptsPartial.cshtml]
+[D:/Projetos/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projetos/DesafioTecnicoUxcomex/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/_ViewImports.cshtml]
+[D:/Projetos/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projetos/DesafioTecnicoUxcomex/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/_ViewStart.cshtml]
+[D:/Projetos/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projetos/DesafioTecnicoUxcomex/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Shared/_Layout.cshtml]
+[D:/Projetos/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-k07fl55f5d
