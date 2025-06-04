@@ -1,0 +1,84 @@
+﻿@model UxComexGerenciadorPedidos.Domain.Entities.Product
+@{
+    Int32  ProductId = Model?.Id ?? 0;
+    String ProductName = Model?.Name ?? "";
+    String ProductDescription = Model?.Description ?? "";
+    Decimal ProductPrice = Model?.Price ?? new decimal(0.0);
+    Int32 ProductQuantityOfStock = Model?.QuantityOfStock ?? 0;
+}
+
+<div>
+    <div class="container w-50 p-0">
+        <div class="h1 text-center text-white bg-danger">Edit Product</div>
+    </div>
+    <br />
+    <div class="container border border-1 w-50 p-4">
+        <div class="mb-3">
+
+            <div class="row">
+                <div class="col">
+                    <label for="inputProductId" class="form-label">Id:</label>
+                </div>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" placeholder="Name" aria-label="Name" id="inputProductId" value="@ProductId" disabled readonly>
+                </div>
+            </div>
+
+        </div>
+        <div class="mb-3">
+
+            <div class="row">
+                <div class="col">
+                    <label for="inputName" class="form-label">Name:</label>
+                </div>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" placeholder="Name" aria-label="Name" id="inputName" value="@ProductName">
+                </div>
+            </div>
+
+        </div>
+        <div class="mb-3">
+
+            <div class="row">
+                <div class="col">
+                    <label for="inputDescription" class="form-label">Description:</label>
+                </div>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" placeholder="Description" aria-label="Description" id="inputDescription" value="@ProductDescription">
+                </div>
+            </div>
+
+        </div>
+        <div class="mb-3">
+
+            <div class="row">
+                <div class="col">
+                    <label for="inputPrice" class="form-label">Price:</label>
+                </div>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" placeholder="Price" aria-label="Price" id="inputPrice" value="@ProductPrice">
+                </div>
+            </div>
+
+        </div>
+        <div class="mb-3">
+
+            <div class="row">
+                <div class="col">
+                    <label for="inputQuantityStock" class="form-label">Quantity of Stock:</label>
+                </div>
+                <div class="col-sm-8">
+                    <input type="number" class="form-control" placeholder="Quantity of Stock" aria-label="Quantity of Stock" id="inputQuantityStock" value="@ProductQuantityOfStock">
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <br />
+    @if (ProductId > 0)
+    {
+        <div class="container border border-1 w-50 p-2">
+            <input type="submit" class="form-control btn btn-danger" value="Save" />
+        </div>
+    }
+</div>

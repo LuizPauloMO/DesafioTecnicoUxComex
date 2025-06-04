@@ -1,0 +1,150 @@
+﻿@using UxComexGerenciadorPedidos.Domain.Entities
+
+<div class="container border border-1">
+    <div class="text-center">
+        <h1 class="display-4 text-danger">Clients Registered</h1>
+    </div>
+
+    <div class="row d-flex justify-content-end">
+        <div class="col-auto">
+            <form class="row g-3" method="GET" id="frmFilterClient">
+                <div class="col-auto">
+                    <label for="inp_FilterClientByName" class="label">Filter by Client:</label>
+                </div>
+                <div class="col-auto">
+                    <input type="text" class="form-control" id="inputFilterClientByNameOrEmail" name="inputFilterClientByNameOrEmail" placeholder="Filter by Client Name or Email">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary mb-3" id="btnFilterClientByName">Filter</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-auto">
+            <a class="btn btn-danger form-control m-0" asp-area="" asp-controller="Client" asp-action="NewClient">New Client</a>
+        </div>
+    </div>
+</div>
+
+<div id="lstClients">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th colspan="5" class="text-center"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="text-center">Name</td>
+                <td class="text-center">Email</td>
+                <td class="text-center">Telephone</td>
+                <td class="text-center">Data Register</td>
+                <td class="text-center"></td>
+            </tr>
+            @foreach (Client client in @ViewBag.ListAllClients)
+            {
+                <tr>
+                    <td>@client.Name</td>
+                    <td>@client.Email</td>
+                    <td>@client.Telephone??""</td>
+                    <td>@client.DateRegister</td>
+                    <td class="p-2">
+                        <div class="row justify-content-center">
+                            <div class="col-sm-4">
+                                <form method="POST" action="/Client/UpdateClient?Id=@client.Id">
+                                    <input type="submit" value="Edit" class="btn btn-info form-control-sm" />
+                                </form>
+                            </div>
+                            <div class="col-sm-4">
+                                <form method="post" action="/Client/Delete?Id=@client.Id">
+                                    <input type="submit" value="Delete" class="btn btn-danger form-control-sm " />
+                                </form>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="5" class="text-end">Total de Itens: @ViewBag.TotalItems</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+
+        $("#frmFilterClient").submit(function (event) {
+            event.preventDefault();
+
+            $.ajax({
+                url: "/Client/ListClients/Filter?name=" + encodeURIComponent($("#inputFilterClientByNameOrEmail").val() ?? ""),
+                method: "GET",
+                success: function (data) {
+                    $("#lstClients").empty();
+
+                    var tbl = '<table class="table table-hover" id = "tbl">';
+                    tbl += '<thead>';
+                    tbl += '    <tr>';
+                    tbl += '        <th colspan="5" class="text-center"></th>';
+                    tbl += '    </tr>';
+                    tbl += '</thead>';
+                    tbl += '   <tbody>'
+                    tbl += '        <tr>';
+                    tbl += '             <td class="text-center">Name </td>';
+                    tbl += '             <td class="text-center">Email </td>';
+                    tbl += '             <td class="text-center">Telephone </td>';
+                    tbl += '             <td class="text-center">Data Register</td>';
+                    tbl += '             <td class="text-center"></td>';
+                    
+                    tbl += '        </tr>';
+                    var TotalItems = 0;
+
+                    data.forEach(function (client) {
+                        tbl += '    <tr>';
+                        tbl += '        <td>' + client.name + '</td>';
+                        tbl += '        <td>' + client.email + '</td>';
+                        tbl += '        <td class="text-center">' + client.telephone + '</td>';
+                        tbl += '        <td class="text-center">' + client.dataregister + '</td>';
+
+                        tbl += '<td class="p-2">';
+                        tbl += '    <div class="row justify-content-center">';
+                        tbl += '        <div class="col-sm-4">';
+                        tbl += '            <form method="post" action="/Client/Update" >';
+                        tbl += '                <input type="hidden" value = "' + client.Id + '" name = "IdEdit" id = "inputHiddenEditClientId" />';
+                        tbl += '                    <input type="submit" value = "Edit" class="btn btn-info form-control-sm" />';
+                        tbl += '             </form>';
+                        tbl += '         </div>';
+                        tbl += '         <div class="col-sm-4" >';
+                        tbl += '             <form method="post" action = "/Product/Delete">';
+                        tbl += '                 <input type="hidden" value = "' + client.Id + '" name = "IdDelete" id = "inputHiddenDeleteClientId" />';
+                        tbl += '                 <input type="submit" value = "Delete" class="btn btn-danger form-control-sm" />';
+                        tbl += '             </form>';
+                        tbl += '        </div>';
+                        tbl += '    </div>';
+                        tbl += '</td>';
+
+                        tbl += '    </tr>';
+
+                        TotalItems++;
+                    })
+
+                    tbl += '  </tbody>';
+                    tbl += '    <tfoot>';
+                    tbl += '     <tr>';
+                    tbl += '         <th colspan="5" class="text-end"> Total de Itens: ' + TotalItems + '</th>';
+                    tbl += '     </tr>';
+                    tbl += '  </tfoot>';
+                    tbl += '  </table>';
+                    
+                    $("#lstClients").html(tbl)
+                },
+                error: function (xhr, status, error) {
+                    console.error('Erro na requisição:', error);
+                }
+            });
+
+        });
+    });
+</script>

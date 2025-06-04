@@ -1,0 +1,78 @@
+﻿<form id="frmNewClient">
+    <div class="container w-50 p-0">
+        <div class="h1 text-center text-white bg-danger">Create New Client</div>
+    </div>
+    <br />
+    <div class="container border border-1 w-50 p-4">
+        <div class="mb-3">
+
+            <div class="row">
+                <div class="col">
+                    <label for="inputClientFullName" class="form-label">Full Name:</label>
+                </div>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" placeholder="Full Name" aria-label="Full Name" id="inputClientFullName">
+                </div>
+            </div>
+
+        </div>
+        <div class="mb-3">
+
+            <div class="row">
+                <div class="col">
+                    <label for="inputClientEmail" class="form-label">E-mail:</label>
+                </div>
+                <div class="col-sm-8">
+                    <input type="email" class="form-control" placeholder="E-mail" aria-label="E-mail" id="inputClientEmail">
+                </div>
+            </div>
+
+        </div>
+        <div class="mb-3">
+
+            <div class="row">
+                <div class="col">
+                    <label for="inputClientTelephone" class="form-label">Telephone:</label>
+                </div>
+                <div class="col-sm-8">
+                    <input type="tel" class="form-control" placeholder="Telephone" aria-label="Telephone" id="inputClientTelephone">
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <br />
+    <div class="container border border-1 w-50 p-2">
+        <input type="submit" class="form-control btn btn-danger" value="Save" />
+    </div>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+
+        $("#frmNewClient").submit(function (event) {
+            event.preventDefault();
+
+            var json = {
+                name: $("#inputClientFullName").val(),
+                email: $("#inputClientEmail").val(),
+                telephone: $("#inputClientTelephone").val()
+            };
+            alert(JSON.stringify(json))
+
+            $.ajax({
+                url: "/Client/New",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(json),
+                success: function (data) {
+                    console.log(JSON.stringify(data));
+                },
+                error: function () {
+
+                }
+            });
+        });
+    });
+</script>

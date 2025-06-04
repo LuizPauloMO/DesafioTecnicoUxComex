@@ -1,0 +1,185 @@
+﻿@using UxComexGerenciadorPedidos.Domain.Entities
+@using UxComexGerenciadorPedidos.Domain.Business
+
+<div class="container w-100">
+    <div class="text-center p-2 bg-dark">
+        <h1 class="display-6 text-danger">Include items in the Order</h1>
+    </div>
+    <div class="container border border-1 p-4">
+        <form class="row g-3 align-content-center" id="frmNewOrder">
+            <div class="row justify-content-start">
+                <div class="col-auto justify-content-center d-flex flex-column align-items-start">
+                    <label for="cmbClients" class="form-label">Include a Client: </label>
+                </div>
+                <div class="col-md-5 justify-content-center">
+                    <select class="form-select form-select-sm mb-3" aria-label=".form-select-lg example" id="cmbClients">
+                        @foreach (Client client in ViewBag.ListOrderClients)
+                        {
+                            <option value="@client.Id">@client.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-5 justify-content-center">
+                <label for="txtProductName" class="form-label">Products</label>
+                <select class="form-select form-select-sm mb-3" aria-label=".form-select-lg example" id="cmbProducts">
+                    @foreach (Product product in ViewBag.ListOrderProducts)
+                    {
+                        <option value="@product.Id">@product.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-3 justify-content-center">
+                <label for="inputQuantity" class="form-label">Quantity</label>
+                <input type="number" class="form-control form-control-sm" id="inputQuantity">
+            </div>
+            <div class="col-md-3 justify-content-center">
+                <label for="inputQuantity" class="form-label"><br /></label>
+                <button type="submit" class="btn-primary form-control form-control-sm">Insert</button>
+            </div>
+        </form>
+    </div>
+    <br />
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <td class="w-50 text-center text-white fw-bold" style="background-color:#848b83;">Product</td>
+                <td class="w-25 text-center text-white fw-bold" style="background-color:#848b83;">Quantity</td>
+                <td class="w-25 text-center text-white fw-bold" style="background-color:#848b83;">Price</td>
+            </tr>
+        </tbody>
+    </table>
+    <div id="pnlOrderItems" class="container border border-1 pb-2 pt-3 overflow-scroll" style="height:400px;">
+        <table class="table table-bordered w-100">
+            <tbody>
+                @{
+                    List<Product>? products = ViewBag.ListOrderProducts;
+                    Int32 QuantityOfItems = 0;
+                    Decimal TotalValue = ViewBag.TotalValueOrder ?? new Decimal(0.0);
+                }
+                @foreach (OrderItem item in ViewBag.ListOrderItems)
+                {
+                    Product? product = products.Where(p => p.Id == item.IdProduct).FirstOrDefault();
+
+                    <tr>
+                        <td class="text-center w-50">@product?.Name<input type="hidden" id="inputHiddenProductPrice" value="@product?.Price??0.0" /></td>
+                        <td class="text-center w-25">@item.Quantity</td>
+                        <td class="text-center w-25">@item.UnityPrice</td>
+                    </tr>
+                    QuantityOfItems++;
+                }
+            </tbody>
+        </table>
+    </div>
+    <table class="table">
+        <tbody>
+            <tr>
+                <th colspan="4" class="text-end bg-dark text-white fw-bold" id="vlTotaltFoot"></th>
+            </tr>
+        </tbody>
+    </table>
+    <br />
+    <form class="row g-1 justify-content-center" id="frmSaveOrder">
+        <div class="col-md-3 justify-content-center">
+            <input type="hidden" value="" />
+            <button type="submit" class="btn-primary form-control form-control-sm">Save</button>
+        </div>
+    </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+
+        $("#vlTotaltFoot").text('Total: @TotalValue.ToString("C2") - @QuantityOfItems items');
+
+        $("#frmNewOrder").submit(function (event) {
+            event.preventDefault();
+            var idProduct = $("#cmbProducts option:selected").val();
+            var quantity = $("#inputQuantity").val() ?? 0;
+
+            var productName = $("#cmbProducts option:selected").text();
+            var clientName = $("#cmbClients option:selected").text();
+
+            $.ajax({
+                url: "/Order/NewOrderItem",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ quantity: quantity, idProduct: idProduct }),
+                success: function (data) {
+
+                    $("#pnlOrderItems").empty();
+                    var tbl = "";
+                    tbl += '<table class="table table-hover">';
+                    tbl += '    <tbody>';
+
+                    var TotalItems = 0;
+                    var ValueTotalOrder = 0.0;
+                    console.log(JSON.stringify(data));
+                    data.forEach(function (orderItem) {
+                        tbl += '<tr>';
+                        tbl += '    <td class="text-center">' + orderItem.productName + '</td>';
+                        tbl += '    <td class="text-center">' + orderItem.quantity + '</td>';
+                        tbl += '    <td class="text-center">' + orderItem.unityPrice.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) + '</td>';
+                        tbl += '</tr>';
+                        TotalItems++;
+
+                        ValueTotalOrder += (orderItem.unityPrice * orderItem.quantity);
+                    });
+
+                    tbl += '    </tbody>';
+                    tbl += '</table>';
+
+                    $("#pnlOrderItems").html(tbl);
+                    $("#vlTotaltFoot").text("Total: " + ValueTotalOrder.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }) + " - " + TotalItems + " items")
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            })
+
+        });
+
+        $("#frmSaveOrder").submit(function (event) {
+            event.preventDefault();
+            var idClient = $("#cmbClients option:selected").val();
+            alert(idClient)
+            $.ajax({
+                url: "/Order/Save",
+                method: "POST",
+                contentType: "application/json",
+                data: idClient,
+                success: function (data) {
+                    console.log(1)
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            })
+
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
