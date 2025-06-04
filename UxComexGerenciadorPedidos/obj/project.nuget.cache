@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "bjZbewOJBKdgsN3wG+LnF6OKJOQLzuPjTk5Kot+p/dfES3IqV0jZxXMPjCzgyxpNi9CXz9M9bOZYxpaxb9Geag==",
+  "dgSpecHash": "m+3uzCd2xuY4EK2zpHvNLio4SMq3INvMRTekbMSMq4xwtN+hsUdIRIyf6xN1jYlkIyIlX8g8ztkbc+nb6X11iQ==",
   "success": true,
-  "projectFilePath": "D:\\Projetos\\DesafioTecnicoUxcomex\\DesafioTecnicoUxComex\\UxComexGerenciadorPedidos\\UxComexGerenciadorPedidos.csproj",
+  "projectFilePath": "D:\\Projetos\\DesafioTecnicoUxComex\\UxComexGerenciadorPedidos\\UxComexGerenciadorPedidos.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Luiz Paulo\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Luiz Paulo\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("UxComexGerenciadorPedidos")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+051d912be1d63754796f0c55a7dba8822883eb1b")]
 [assembly: System.Reflection.AssemblyProductAttribute("UxComexGerenciadorPedidos")]
 [assembly: System.Reflection.AssemblyTitleAttribute("UxComexGerenciadorPedidos")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
