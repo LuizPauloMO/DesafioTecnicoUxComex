@@ -24,20 +24,20 @@ namespace UxComexGerenciadorPedidos.Repositories
         {
             return this.Id;
         }
-        public async Task Add(Order order)
+        public void Add(Order order)
         {
             var SqlParams = new
             {
                 IdClient = order.IdClient,
-                ValueTotal = order.ValueTotal,
+                TotalValue = order.TotalValue,
                 DateOrder = order.DateOrder,
                 OrderStatus = order.Status
             };
 
             StringBuilder strB = new StringBuilder();
-            strB.Append("INSERT INTO [Order](IdClient,ValueTotal,DateOrder,Status)").AppendLine();
-            strB.Append("VALUES(@IdClient,@ValueTotal,@DateOrder,@OrderStatus)");
-
+            strB.AppendLine("INSERT INTO [Order](IdClient,TotalValue,DateOrder,Status)");
+            strB.AppendLine("VALUES(@IdClient,@TotalValue,@DateOrder,@OrderStatus)");
+            strB.AppendLine("SELECT SCOPE_IDENTITY()");
 
             using (SqlConnection con = new SqlConnection(uxComexDbString))
             {
@@ -46,7 +46,7 @@ namespace UxComexGerenciadorPedidos.Repositories
 
                 try
                 {
-                    await con.ExecuteAsync(strB.ToString(), SqlParams, sqlTransaction);                  
+                   Id= con.ExecuteScalar<int>(strB.ToString(), SqlParams, sqlTransaction);                  
                     sqlTransaction.Commit();
                    
                 }
@@ -57,7 +57,7 @@ namespace UxComexGerenciadorPedidos.Repositories
                 }
                 
                 sqlTransaction.Dispose();
-                Id = await con.ExecuteScalarAsync<int>("SELECT MAX(Id) FROM [Order]");
+               // Id = await con.ExecuteScalarAsync<int>("SELECT MAX(Id) FROM [Order]");
                 con.Close();
             }
         }
@@ -68,14 +68,14 @@ namespace UxComexGerenciadorPedidos.Repositories
             {
                 Id = order.Id,
                 IdClient = order.IdClient,
-                ValueTotal = order.ValueTotal,
+                ValueTotal = order.TotalValue,
                 DateOrder = order.DateOrder,
                 OrderStatus = order.Status
             };
 
             StringBuilder strB = new StringBuilder();
             strB.Append("UPDATE [Order]").AppendLine();
-            strB.Append("SET IdClient=@IdClient,ValueTotal=@ValueTotal,DateOrder=@DateOrder,Status=@OrderStatus").AppendLine();
+            strB.Append("SET IdClient=@IdClient,TotalValue=@TotalValue,DateOrder=@DateOrder,Status=@OrderStatus").AppendLine();
             strB.Append("WHERE Id=@Id");
 
             using (SqlConnection con = new SqlConnection(uxComexDbString))
@@ -127,7 +127,7 @@ namespace UxComexGerenciadorPedidos.Repositories
             }
         }
 
-        public List<Order>? ReadAll()
+        public List<Order>? List()
         {
             List<Order>? orders = null;
             using (SqlConnection con = new SqlConnection(uxComexDbString))
@@ -139,7 +139,7 @@ namespace UxComexGerenciadorPedidos.Repositories
             return orders;
         }
 
-        public Order? ReadById(Int32 Id_)
+        public Order? GetById(Int32 Id_)
         {
             var SqlParam = new { Id = Id_ };
 

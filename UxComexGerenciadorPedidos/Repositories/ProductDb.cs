@@ -20,7 +20,7 @@ namespace UxComexGerenciadorPedidos.Repositories
             return this.Id;
         }
 
-        public async Task Add(Product product)
+        public void Add(Product product)
         {
             var SqlParams = new
             {
@@ -31,9 +31,9 @@ namespace UxComexGerenciadorPedidos.Repositories
             };
 
             StringBuilder strB = new StringBuilder();
-            strB.Append("INSERT INTO Product(Name,Description,Price,QuantityOfStock)").AppendLine();
-            strB.Append("VALUES(@Name,@Description,@Price,@QuantityOfStock)");
-
+            strB.AppendLine("INSERT INTO Product(Name,Description,Price,QuantityOfStock)");
+            strB.AppendLine("VALUES(@Name,@Description,@Price,@QuantityOfStock)");
+            strB.AppendLine("SELECT SCOPE_IDENTITY()");
 
             using (SqlConnection con = new SqlConnection(uxComexDbString))
             {
@@ -42,7 +42,7 @@ namespace UxComexGerenciadorPedidos.Repositories
 
                 try
                 {
-                    await con.ExecuteAsync(strB.ToString(), SqlParams,sqlTransaction);
+                    Id=con.ExecuteScalar<int>(strB.ToString(), SqlParams,sqlTransaction);
                     sqlTransaction.Commit();
                 }
                 catch (Exception)
@@ -52,7 +52,7 @@ namespace UxComexGerenciadorPedidos.Repositories
                 }
               
                 sqlTransaction.Dispose();
-                Id = await con.ExecuteScalarAsync<int>("SELECT MAX(Id) FROM [Product]");
+                //Id = await con.ExecuteScalarAsync<int>("SELECT MAX(Id) FROM [Product]");
                 con.Close();
             }
         }
@@ -70,7 +70,7 @@ namespace UxComexGerenciadorPedidos.Repositories
 
             StringBuilder strB = new StringBuilder();
             strB.Append("UPDATE Product").AppendLine();
-            strB.Append("SET Name=@Name,Description=@Description,Price=@Price,Quantity_Of_Stock=@Quantity_Of_Stock").AppendLine();
+            strB.Append("SET Name=@Name,Description=@Description,Price=@Price,QuantityOfStock=@QuantityOfStock").AppendLine();
             strB.Append("WHERE Id=@Id");
 
             using (SqlConnection con = new SqlConnection(uxComexDbString))
@@ -122,7 +122,7 @@ namespace UxComexGerenciadorPedidos.Repositories
             }
         }
 
-        public List<Product> ReadAll()
+        public List<Product> List()
         {
             List<Product>? products = null;
             using (SqlConnection con = new SqlConnection(uxComexDbString))
@@ -134,7 +134,7 @@ namespace UxComexGerenciadorPedidos.Repositories
             return products;
         }
 
-        public Product? ReadById(Int32 Id_)
+        public Product? GetById(Int32 Id_)
         {
             var SqlParam = new { Id = Id_ };
 

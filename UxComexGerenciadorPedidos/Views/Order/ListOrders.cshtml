@@ -3,118 +3,86 @@
 
 
 <div class="container border border-1 p-2  bg-dark">
-
-    <div class="row g-1 text-danger">
-        <div class="col-sm-12">
-            <h1 class="display-6 text-center">Saved Orders</h1>
-        </div>
+    <div class="col-sm-12">
+        <h1 class="display-6 text-center text-danger">Saved Orders</h1>
     </div>
-    <form class="row g-4 justify-content-end" method="GET" id="frmFilterOrder">
-        <div class="col-auto">
-            <label for="inp_FilterOrderByClient" class="form-label label">Filter by Client:</label>
-        </div>
-        <div class="col-auto">
-            <input type="text" class="form-control form-control-sm" id="inputFilterOrderByClientOrStatus" name="inputFilterOrderByClientOrStatus" placeholder="Filter by Client Name or Status">
-        </div>
-        <div class="col-sm-auto">
-            <button type="submit" class="btn-primary form-control form-control-sm m-0 text-decoration-none" id="btnFilterOrderByClient">Filter</button>
-        </div>
-        <div class="col-auto d-flex justify-content-end">
-            <div class="row">
-                <div class="col-sm-auto">
-                    <a class="btn-danger form-control form-control-sm m-0 text-decoration-none" asp-area="" asp-controller="Order" asp-action="NewOrder">New Order</a>
-                </div>
+    <form class="row" method="GET" id="frmFilterOrder">
+        <div class="d-inline-flex col justify-content-end">
+            <div class="col-sm-auto d-block p-1">
+                <label for="inp_FilterOrderByClient" class="text-white form-label-sm form-control-sm">Filter by Client:</label>
+            </div>
+            <div class="col-sm-4 p-1">
+                <input type="text" class="form-control form-control-sm" id="txtFilterOrderByName" name="txtFilterOrderByName" placeholder="Enter the Client's name" />
+            </div>
+
+            <div class="col-sm-auto d-block p-1">
+                <label for="inp_FilterOrderByClient" class="text-white form-label-sm form-control-sm">Filter by Status:</label>
+            </div>
+            <div class="col-sm-auto p-1">
+                <select class="form-select-sm form-control-sm" id="cbOrderStatus">
+                    <option value="-1">All</option>
+                    <option value="0">New</option>
+                    <option value="1">Processing</option>
+                    <option value="2">Completed</option>
+                    <option value="3">Cancelled</option>
+                </select>
+            </div>
+            <div class="col-sm-auto p-1">
+                <form method="GET" id="frmFilterOrder">
+                    <input type="submit" class="btn-primary form-control form-control-sm m-0 text-decoration-none" id="btnFilterOrderByClientOrStatus" value="Filter"/>
+                </form>              
+            </div>
+            <div class="col-sm-auto p-1">
+                <a class="btn-danger form-control form-control-sm m-0 text-decoration-none" asp-area="" asp-controller="Order" asp-action="NewOrder">New Order</a>
             </div>
         </div>
     </form>
+    <div class="row w-auto">
+        <div class="d-inline-flex col justify-content-end">
+            <div class="col-sm-auto d-block p-1">
+                <label for="inp_FilterOrderByClient" class="text-white form-label-sm">Total de Itens: <span class="badge rounded-pill bg-danger" id="spTotalItems">@ViewBag.TotalItems</span></label>
+            </div>
+        </div>
+    </div>
 </div>
-<table class="table" >
+<table class="table">
     <tbody>
         <tr>
-            <td class="text-white fw-bold w-50" style="background-color:#848b83;">Client</td>
-            <td class="text-white fw-bold" style="background-color:#848b83;">Date Order</td>
-            <td class="text-white fw-bold" style="background-color:#848b83;">Value Total</td>
-            <td class="text-white fw-bold" style="background-color:#848b83;">Status</td>
+            <td class="text-white fw-bold w-50 text-center" style="background-color:dimgray;">Client</td>
+            <td class="text-white fw-bold text-center" style="background-color:#848b83;width:160px;">Date Order</td>
+            <td class="text-white fw-bold text-center" style="background-color:#848b83;width:130px;">Total Value</td>
+            <td class="text-white fw-bold text-center" style="background-color:#848b83;width:130px;">Status</td>
+            <td class="text-white fw-bold w-auto text-center" style="background-color:#848b83;"></td>
         </tr>
     </tbody>
 </table>
 
-    <div id="lstOrders overflow-scroll" style="height:400px;">
-        <table class="table table-sm table-bordered">
-            <tbody>
+<div id="lstOrders" class="overflow-scroll overflow-hidden" style="height:400px;">
+    <table class="table table-sm table-bordered">
+        <tbody>
             @{
                 List<Client>? clients = ViewBag.ListOrderClients;
             }
-                @foreach (Order order in @ViewBag.ListAllOrders)
-                {
+            @foreach (Order order in @ViewBag.ListAllOrders)
+            {
                 Client? client = clients.ToList().Where(p => p.Id == order.IdClient).FirstOrDefault();
                 String ClientName = @client?.Name ?? "";
                 <tr>
-                        <td class="w-50">@ClientName</td>
-                        <td>@order.DateOrder</td>
-                        <td>@order.ValueTotal.ToString("C2")</td>
-                        <td>@order.PrintStatus()</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-
-<table class="table table-hover">
-    <tbody>
-        <tr>
-            <th colspan="4" class="text-end fw-bold text-white bg-dark">Total de Itens: @ViewBag.TotalItems</th>
-        </tr>
-    </tbody>
-</table>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script language="javascript" type="text/javascript">
-    $(document).ready(function () {
-
-        $("#frmFilterOrder").submit(function (event) {
-            event.preventDefault();
-
-            $.ajax({
-                url: "/Order/ListOrders/Filter?idclient=1&orderstatus=1",
-                method: "GET",
-                success: function (data) {
-                    $("#lstClients").empty();
-
-                    var tbl = '<table class="table table-hover" id = "tbl">';
-                    tbl += '   <tbody>'
-                    tbl += '        <tr>';
-                    tbl += '             <td>Cliente </td>';
-                    tbl += '             <td>Date Order</td>';
-                    tbl += '             <td>Value Total</td>';
-                    tbl += '             <td>Status</td>';
-                    tbl += '        </tr>';
-                    var TotalItems = 0;
-
-                    data.forEach(function (order) {
-                        tbl += '    <tr>';
-                        tbl += '        <td>Cliente</td>';
-                        tbl += '        <td>' + order.dateorder + '</td>';
-                        tbl += '        <td>' + order.valuetotal + '</td>';
-                        tbl += '        <td>' + order.status + '</td>';
-                        tbl += '    </tr>';
-                        TotalItems++;
-                    })
-
-                    tbl += '  </tbody>';
-                    tbl += '    <tfoot>';
-                    tbl += '     <tr>';
-                    tbl += '         <th colspan="4" class="text-end"> Total de Itens: ' + TotalItems + '</th>';
-                    tbl += '     </tr>';
-                    tbl += '  </tfoot>';
-                    tbl += '  </table>';
-
-                    $("#lstClients").html(tbl);
-                },
-                error: function (xhr, status, error) {
-                    console.error('Erro na requisição:', error);
-                }
-            });
-
-        });
-    });
-</script>
+                    <td class="w-50 text-center">@ClientName</td>
+                    <td class="text-center" style="width:220px;">@order.DateOrder</td>
+                    <td class="text-center" style="width:230px;">@order.TotalValue.ToString("C2")</td>
+                    <td class="text-center" style="width:230px;">@order.PrintStatus()</td>
+                    <td class="p-0 text-center" style="width:150px;">
+                        <div class="d-inline-flex col align-content-center">
+                            <div class="col-sm-auto p-1">
+                                <form method="POST" action="/Order/UpdateOrder?Id=@order.Id">
+                                    <input type="submit" value="Update" class="btn-primary form-control form-control-sm m-0 text-decoration-none" />
+                                </form>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

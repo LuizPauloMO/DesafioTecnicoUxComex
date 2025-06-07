@@ -1,63 +1,68 @@
 ﻿@using UxComexGerenciadorPedidos.Domain.Entities;
 
-<div class="container border border-1">
-    <div class="text-center">
-        <h1 class="display-4 text-danger">Products Registered</h1>
+<div class="container border border-1 p-2 bg-dark">
+    <div class="col-sm-12">
+        <h1 class="display-6 text-center text-danger">Products Registered</h1>
     </div>
-
-    <div class="row d-flex justify-content-end">
-        <div class="col-auto">
-            <form class="row g-3" method="GET" id="frmFilterProduct">
-                <div class="col-auto">
-                    <label for="inp_FilterProductByName" class="label">Filter by Product:</label>
-                </div>
-                <div class="col-auto">
-                    <input type="text" class="form-control" id="inputFilterProductByName" name="inputFilterProductByName" placeholder="Filter by Product Name">
-                </div>
-                <div class="col-auto">
-                    <button type="submit" class="btn btn-primary mb-3" id="btnFilterProductByName">Filter</button>
-                </div>
-            </form>
+    <div class="row w-auto">
+        <div class="d-inline-flex col justify-content-end">
+            <div class="col-sm-auto d-block p-1">
+                <label for="inp_FilterOrderByClient" class="text-white form-label-sm form-control-sm">Filter by Product:</label>
+            </div>
+            <div class="col-sm-4 p-1">
+                <input type="text" class="form-control form-control-sm" id="inputFilterProductByName" name="inputFilterProductByName" placeholder="Filter by Product Name">
+            </div>
+            <div class="col-sm-auto p-1">
+                <form method="GET" id="frmFilterProduct">
+                    <input type="submit" class="btn-primary form-control form-control-sm m-0 text-decoration-none" id="btnFilterProductByName" value="Filter" />
+                </form>
+            </div>
+            <div class="col-sm-auto p-1">
+                <a class="btn-danger form-control form-control-sm m-0 text-decoration-none" asp-controller="Product" asp-action="NewProduct">New Product</a>
+            </div>
         </div>
-        <div class="col-auto">
-            <a class="btn btn-danger form-control m-0" asp-area="" asp-controller="Product" asp-action="NewProduct">New Product</a>
+    </div>
+    <div class="row w-auto">
+        <div class="d-inline-flex col justify-content-end">
+            <div class="col-sm-auto d-block p-1">
+                <label for="inp_FilterOrderByClient" class="text-white form-label-sm">Total de Itens: <span class="badge rounded-pill bg-danger" id="spTotalItems">@ViewBag.TotalItems</span></label>
+            </div>
         </div>
     </div>
 </div>
 
-<div id="lstProducts">
-    <table class="table table-hover" id="tbl">
-        <thead>
-            <tr>
-                <th colspan="5" class="text-center"></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="text-center">Name</td>
-                <td class="text-center">Description</td>
-                <td class="text-center">Price</td>
-                <td class="text-center">Quantity of Stock</td>
-                <td class="text-center"></td>
-            </tr>
+<table class="table border-0" id="tbl">
+    <tbody>
+        <tr>
+            <td class="text-white fw-bold text-center" style="background-color:dimgray;width:330px">Name</td>
+            <td class="text-white fw-bold text-center" style="background-color:#848b83;width:330px">Description</td>
+            <td class="text-white fw-bold text-center" style="background-color:#848b83;width:100px">Price</td>
+            <td class="text-white fw-bold text-center" style="background-color:#848b83;width:200px">Quantity of Stock</td>
+            <td class="text-white fw-bold w-auto text-center" style="background-color:#848b83;"></td>
+        </tr>
+    </tbody>
+</table>
 
+<div id="lstProducts" class="overflow-scroll overflow-hidden" style="height:300px;">
+    <table class="table table-sm table-bordered" id="tbl">
+        <tbody>
             @foreach (Product product in @ViewBag.ListAllProducts)
             {
                 <tr>
-                    <td>@product.Name</td>
-                    <td>@product.Description</td>
-                    <td class="text-center">@product.Price.ToString("C2")</td>
-                    <td class="text-center">@product.QuantityOfStock</td>
-                    <td class="p-2">
-                        <div class="row justify-content-center">
-                            <div class="col-sm-4">
-                                <form method="post" action="/Product/Update?Id=@product.Id">
-                                    <input type="submit" value="Edit" class="btn btn-info form-control-sm" />
+                    <td class="text-center" style="width:400px;">@product.Name</td>
+                    <td class="text-center" style="width:400px;">@product.Description</td>
+                    <td class="text-center" style="width:100px;">@product.Price.ToString("C2")</td>
+                    <td class="text-center" style="width:200px;">@product.QuantityOfStock</td>
+                    <td class="text-center" style="width:150px;">
+                        <div class="d-inline-flex col align-content-center">
+                            <div class="col-sm-auto p-1">
+                                <form method="POST" action="/Product/UpdateProduct?Id=@product.Id">
+                                    <input type="submit" value="Update" class="btn-primary form-control form-control-sm m-0 text-decoration-none" />
                                 </form>
                             </div>
-                            <div class="col-sm-4">
-                                <form method="post" action="/Product/Delete?Id=@product.Id">
-                                    <input type="submit" value="Delete" class="btn btn-danger form-control-sm " />
+                            <div class="col-sm-auto p-1">
+                                <form method="POST" action="/Product/Delete?Id=@product.Id">
+                                    <input type="submit" value="Delete" class="btn-danger form-control form-control-sm m-0 text-decoration-none" />
                                 </form>
                             </div>
                         </div>
@@ -65,70 +70,9 @@
                 </tr>
             }
         </tbody>
-        <tfoot>
-            <tr>
-                <th colspan="5" class="text-end">Total de Itens: @ViewBag.TotalItems</th>
-            </tr>
-        </tfoot>
     </table>
 </div>
 
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script language="javascript" type="text/javascript">
-    $(document).ready(function () {
 
-        $("#frmFilterProduct").submit(function (event) {
-            event.preventDefault();
 
-            $.ajax({
-                url: "/Product/ListProducts/Filter?name=" + encodeURIComponent($("#inputFilterProductByName").val() ?? ""),
-                method: "GET",
-                success: function (data) {
-                    $("#lstProducts").empty();
-
-                    var tbl = '<table class="table table-hover" id = "tbl">';
-                    tbl += '<thead>';
-                    tbl += '    <tr>';
-                    tbl += ' <th colspan="5" class="text-center" > </th>';
-                    tbl += '      </tr>';
-                    tbl += '</thead>';
-                    tbl += '   <tbody>'
-                    tbl += '        <tr>';
-                    tbl += '             <td class="text-center">Name </td>';
-                    tbl += '             <td class="text-center">Description </td>';
-                    tbl += '             <td class="text-center">Price </td>';
-                    tbl += '             <td class="text-center">Quantity of Stock </td>';
-                    tbl += '             <td class="text-center"></td>';
-                    tbl += '        </tr>';
-                    var TotalItems = 0;
-
-                    data.forEach(function (product) {
-                        tbl += '    <tr>';
-                        tbl += '        <td>' + product.name + '</td>';
-                        tbl += '        <td>' + product.description + '</td>';
-                        tbl += '        <td class="text-center">' + product.price.toLocaleString("pt-BR",{style:"currency",currency:"BRL"}) + '</td>';
-                        tbl += '        <td class="text-center">' + product.quantityOfStock.toLocaleString("pt-BR", {style:"currency", currency:"BRL"}) + '</td>';
-                        tbl += '        <td><form method="post" action = "/Product/Delete?Id=' + product.Id + '" > <input type="submit" value = "Delete Product" class="btn btn-danger form-control-sm" /> </form></td >';
-                        tbl += '    </tr>';
-                        TotalItems++;
-                    })
-
-                    tbl += '  </tbody>';
-                    tbl += '    <tfoot>';
-                    tbl += '     <tr>';
-                    tbl += '         <th colspan="5" class="text-end"> Total de Itens: ' + TotalItems + '</th>';
-                    tbl += '     </tr>';
-                    tbl += '  </tfoot>';
-                    tbl += '  </table>';
-
-                    $("#lstProducts").html(tbl);
-                },
-                error: function (xhr, status, error) {
-                    console.error('Erro na requisição:', error);
-                }
-            });
-
-        });
-    });
-</script>

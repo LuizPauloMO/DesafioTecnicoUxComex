@@ -20,7 +20,7 @@ namespace UxComexGerenciadorPedidos.Repositories
         {
             return this.Id;
         }
-        public async Task Add(OrderItem orderItem)
+        public void Add(OrderItem orderItem)
         {
             var SqlParams = new
             {
@@ -32,9 +32,9 @@ namespace UxComexGerenciadorPedidos.Repositories
 
 
             StringBuilder strB = new StringBuilder();
-            strB.Append("INSERT INTO OrderItem(IdOrder,IdProduct,UnityPrice,Quantity)").AppendLine();
-            strB.Append("VALUES(@IdOrder,@IdProduct,@UnityPrice,@Quantity)");
-
+            strB.AppendLine("INSERT INTO OrderItem(IdOrder,IdProduct,UnityPrice,Quantity)");
+            strB.AppendLine("VALUES(@IdOrder,@IdProduct,@UnityPrice,@Quantity)");
+            strB.AppendLine("SELECT SCOPE_IDENTITY()");
 
             using (SqlConnection con = new SqlConnection(uxComexDbString))
             {
@@ -43,7 +43,7 @@ namespace UxComexGerenciadorPedidos.Repositories
 
                 try
                 {
-                    await con.ExecuteAsync(strB.ToString(), SqlParams, sqlTransaction);
+                    Id=con.ExecuteScalar<int>(strB.ToString(), SqlParams, sqlTransaction);
                     sqlTransaction.Commit();
                 }
                 catch (Exception)
@@ -53,7 +53,7 @@ namespace UxComexGerenciadorPedidos.Repositories
                 }
 
                 sqlTransaction.Dispose();
-                Id = await con.ExecuteScalarAsync<int>("SELECT MAX(Id) FROM [OrderItem]");
+                //Id = await con.ExecuteScalarAsync<int>("SELECT SCOPE_IDENTITY()");
                 con.Close();
             }
         }
@@ -124,7 +124,7 @@ namespace UxComexGerenciadorPedidos.Repositories
             }
         }
 
-        public List<OrderItem>? ReadAll()
+        public List<OrderItem>? List()
         {
             List<OrderItem>? ordersItems = null;
             using (SqlConnection con = new SqlConnection(uxComexDbString))
@@ -136,7 +136,7 @@ namespace UxComexGerenciadorPedidos.Repositories
             return ordersItems;
         }
 
-        public OrderItem? ReadById(Int32 Id_)
+        public OrderItem? GetById(Int32 Id_)
         {
             var SqlParam = new { @Id = Id_ };
 

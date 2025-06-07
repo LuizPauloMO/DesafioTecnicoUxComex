@@ -9,41 +9,52 @@ namespace UxComexGerenciadorPedidos.Domain.Business
 {
     public class ProductService
     {
-        private IUxComexServiceDB<Product> productDb;
+        private readonly IUxComexServiceDB<Product> ctxProduct;
 
         public ProductService(IConfiguration configuration)
         {
-            this.productDb = new ProductDb(configuration);
+            this.ctxProduct = new ProductDb(configuration);
         }
         public List<Product>? ListAll()
         {
-            return productDb.ReadAll();
+            return ctxProduct.List();
         }
 
         public List<Product>? GetByName(String name)
         {
-            return productDb.ReadAll()?.Where(p => p.Name == name).ToList();
+            return ctxProduct.List()?
+                             .Where(p => p.Name.Contains(name.Trim()))
+                             .ToList();
         }
 
         public Product? GetById(Int32 Id)
         {
-            return productDb.ReadById(Id);
+            return ctxProduct.GetById(Id);
         }
 
         public List<Product>? ListAllInOrderByAsc()
         {
-            return ListAll()?.OrderBy(p => p.Name).ToList();
+            return ListAll()?.OrderBy(p => p.Name)
+                             .ToList();
         }
 
         public List<Product>? ListAllInOrderByDesc()
         {
-            return ListAll()?.OrderByDescending(p => p.Name).ToList();
+            return ListAll()?.OrderByDescending(p => p.Name)
+                             .ToList();
         }
-        public async Task Create(Product? product)
+        public void Create(Product? product)
         {
             if (product != null)
             {
-                await productDb.Add(product);
+                try
+                {
+                    ctxProduct.Add(product);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
             }
         }
 
@@ -51,11 +62,18 @@ namespace UxComexGerenciadorPedidos.Domain.Business
         {
             if (Id > 0)
             {
-                Product? product_ = productDb.ReadById(Id);
+                Product? product_ = ctxProduct.GetById(Id);
 
                 if (product_ != null)
                 {
-                    await productDb.Delete(Id);
+                    try
+                    {
+                        await ctxProduct.Delete(Id);
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
                 }
             }
         }
@@ -64,18 +82,57 @@ namespace UxComexGerenciadorPedidos.Domain.Business
         {
             if (product != null)
             {
-                Product? product_ = productDb.ReadById(product.Id);
+                Product? product_ = ctxProduct.GetById(product.Id);
 
                 if (product_ != null)
                 {
-                    await productDb.Update(product);
+                    try
+                    {
+                        await ctxProduct.Update(product);
+                    }
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
                 }
             }
         }
 
         public Int32 QuantityOfStock(Product product)
         {
-            return productDb?.ReadById(product.Id)?.QuantityOfStock ?? 0;            
+            Int32 QuantityOfStock = 0;
+            Product? prod = ctxProduct?.GetById(product.Id);
+
+            if (prod != null)
+            {
+                QuantityOfStock = prod.QuantityOfStock;
+            }
+            return QuantityOfStock;
+        }
+
+        public async Task RemoveProductOfStock(Int32 ProductId, int quantity)
+        {
+            Product? prod = GetById(ProductId);
+            if (prod != null)
+            {
+                if (prod.QuantityOfStock >= quantity)
+                {
+                    for (int n = 0; n < quantity; n++)
+                    {
+                        prod.QuantityOfStock--;
+
+                        try
+                        {
+                            await Update(prod);
+                        }
+                        catch (Exception)
+                        {
+                            throw;
+                        }                        
+                    }
+                }
+            }
         }
     }
 }

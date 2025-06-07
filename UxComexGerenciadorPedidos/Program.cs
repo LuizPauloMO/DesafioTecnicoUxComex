@@ -10,10 +10,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<ClientService>();
 builder.Services.AddSingleton<ProductService>();
 builder.Services.AddSingleton<OrderService>();
-builder.Services.AddDbContext<UxComexDataContext>(opts =>
-{
-    opts.UseSqlServer(builder.Configuration.GetConnectionString("uxComexDbString"));
-});
+builder.Services.AddSingleton<OrderItemService>();
+builder.Services.AddDbContext<UxComexDataContext>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

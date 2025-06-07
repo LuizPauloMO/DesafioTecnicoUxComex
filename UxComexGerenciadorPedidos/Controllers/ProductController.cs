@@ -15,6 +15,7 @@ namespace UxComexGerenciadorPedidos.Controllers
             this.productService = productService;
         }
 
+        [Route("/Product/ListProducts")]
         public IActionResult ListProducts()
         {
             ViewBag.ListAllProducts = productService.ListAll();
@@ -47,33 +48,43 @@ namespace UxComexGerenciadorPedidos.Controllers
             return View();
         }
 
-        [Route("/Product/EditProduct")]
-        public IActionResult EditProduct()
+        [HttpPost]
+        [Route("/Product/UpdateProduct")]
+        public IActionResult UpdateProduct([FromQuery]int Id)
         {
-            return View();
+            Product? product = productService.GetById(Id);
+            return View(product);
+        }
+
+        [HttpPost]
+        [Route("/Product/Update")]
+        public async Task<IActionResult> Update([FromBody] Product p)
+        {
+            Product? product = productService.GetById(p.Id);
+            if (product != null)
+            {
+                await productService.Update(p);
+            }
+
+            return RedirectToAction("ListProducts");
         }
 
         [HttpPost]
         [Route("/Product/New")]
         public async Task<IActionResult> New([FromBody] Product product)
         {
-           await productService.Create(product);
+            try
+            {
+                productService.Create(product);
+            }
+            catch (Exception)
+            {
+                throw;
+            }          
 
            return RedirectToAction("ListProducts");
         }
 
-        [HttpPost]
-        [Route("/Product/UpdateProduct")]
-        public async Task<IActionResult> Update([FromQuery]int Id)
-        {
-            Product? product = productService.GetById(Id);
-            if(product != null)
-            {
-                await productService.Update(product);
-            }
-            
-            return RedirectToAction("ListProducts");
-        }
         [HttpPost]
         [Route("/Product/Delete")]
         public async Task<IActionResult> Delete([FromQuery] int Id)

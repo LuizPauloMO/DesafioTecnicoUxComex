@@ -45,8 +45,30 @@ namespace UxComexGerenciadorPedidos.Controllers
         }
 
         [HttpPost]
+        [Route("/Client/New")]
+        public IActionResult New([FromBody] Client client)
+        {
+            Client? cli = clientService.GetById(client.Id);
+
+            if (cli == null)
+            {
+                client.DateRegister = DateTime.Now;
+                try
+                {
+                    clientService.New(client);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }               
+            }
+
+            return RedirectToAction("ListClients");
+        }
+
+        [HttpPost]
         [Route("/Client/UpdateClient")]
-        public IActionResult UpdateClient([FromQuery]int Id)
+        public IActionResult UpdateClient([FromQuery] int Id)
         {
             Client? client = clientService.GetById(Id);
             if (client != null)
@@ -57,26 +79,11 @@ namespace UxComexGerenciadorPedidos.Controllers
         }
 
         [HttpPost]
-        [Route("/Client/New")]
-        public async Task<IActionResult> New([FromBody] Client client)
+        [Route("/Client/Update")]
+        public async Task<IActionResult> Update([FromBody] Client client)
         {
             Client? cli = clientService.GetById(client.Id);
-
-            if (cli == null)
-            {
-                client.DateRegister = DateTime.Now;
-                await clientService.New(client);
-            }
-
-            return RedirectToAction("ListClients");
-        }
-
-        [HttpPost]
-        [Route("/Client/Update")]
-        public async Task<IActionResult> Update([FromQuery] int Id)
-        {
-            Client? client = clientService.GetById(Id);
-            if (client != null)
+            if (cli != null)
             {
                 await clientService.Edit(client);
             }

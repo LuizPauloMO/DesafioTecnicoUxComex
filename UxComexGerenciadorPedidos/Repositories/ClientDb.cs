@@ -21,7 +21,7 @@ namespace UxComexGerenciadorPedidos.Repositories
             return this.Id;
         }
 
-        public async Task Add(Client client)
+        public void Add(Client client)
         {
             var SqlParams = new
             {
@@ -32,9 +32,9 @@ namespace UxComexGerenciadorPedidos.Repositories
             };
 
             StringBuilder strB = new StringBuilder();
-            strB.Append("INSERT INTO Client(Name,Email,Telephone,DateRegister)").AppendLine();
-            strB.Append("VALUES(@Name,@Email,@Telephone,@DateRegister)");
-
+            strB.AppendLine("INSERT INTO Client(Name,Email,Telephone,DateRegister)");
+            strB.AppendLine("VALUES(@Name,@Email,@Telephone,@DateRegister)");
+            strB.AppendLine("SELECT SCOPE_IDENTITY()");
 
             using (SqlConnection con = new SqlConnection(uxComexDbString))
             {
@@ -44,7 +44,7 @@ namespace UxComexGerenciadorPedidos.Repositories
 
                 try
                 {
-                    await con.ExecuteAsync(strB.ToString(), SqlParams, sqlTransaction);
+                    Id= con.ExecuteScalar<int>(strB.ToString(), SqlParams, sqlTransaction);
                     sqlTransaction.Commit();
                 }
                 catch (Exception)
@@ -54,7 +54,7 @@ namespace UxComexGerenciadorPedidos.Repositories
                 }
           
                 sqlTransaction.Dispose();
-                Id = await con.ExecuteScalarAsync<int>("SELECT MAX(Id) FROM [Client]");
+                //Id = await con.ExecuteScalarAsync<int>("SELECT MAX(Id) FROM [Client]");
                 con.Close();
             }
         }
@@ -66,13 +66,12 @@ namespace UxComexGerenciadorPedidos.Repositories
                 Id=client.Id,
                 Name = client.Name,
                 Email = client.Email,
-                Telephone = client.Telephone,
-                DateRegister = client.DateRegister
+                Telephone = client.Telephone
             };
 
             StringBuilder strB = new StringBuilder();
             strB.Append("UPDATE Client").AppendLine();
-            strB.Append("SET Name=@Name,Email=@Email,Telephone=@Telephone,DateRegister=@DateRegister").AppendLine();
+            strB.Append("SET Name=@Name,Email=@Email,Telephone=@Telephone").AppendLine();
             strB.Append("WHERE Id=@Id");
 
             using (SqlConnection con = new SqlConnection(uxComexDbString))
@@ -126,7 +125,7 @@ namespace UxComexGerenciadorPedidos.Repositories
             }
         }
 
-        public List<Client> ReadAll()
+        public List<Client> List()
         {
             List<Client>? clients = null;
             using (SqlConnection con = new SqlConnection(uxComexDbString))
@@ -138,7 +137,7 @@ namespace UxComexGerenciadorPedidos.Repositories
             return clients;
         }
 
-        public Client? ReadById(Int32 Id_)
+        public Client? GetById(Int32 Id_)
         {
             var SqlParam = new {Id = Id_ };
 

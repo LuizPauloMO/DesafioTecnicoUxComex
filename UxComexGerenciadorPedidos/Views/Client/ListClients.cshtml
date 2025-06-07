@@ -1,62 +1,73 @@
 ﻿@using UxComexGerenciadorPedidos.Domain.Entities
 
-<div class="container border border-1">
-    <div class="text-center">
-        <h1 class="display-4 text-danger">Clients Registered</h1>
+<div class="container border border-1 p-2 bg-dark">
+    <div class="col-sm-12">
+        <h1 class="display-6 text-center text-danger">Clients Recordeds</h1>
     </div>
-
-    <div class="row d-flex justify-content-end">
-        <div class="col-auto">
-            <form class="row g-3" method="GET" id="frmFilterClient">
-                <div class="col-auto">
-                    <label for="inp_FilterClientByName" class="label">Filter by Client:</label>
-                </div>
-                <div class="col-auto">
-                    <input type="text" class="form-control" id="inputFilterClientByNameOrEmail" name="inputFilterClientByNameOrEmail" placeholder="Filter by Client Name or Email">
-                </div>
-                <div class="col-auto">
-                    <button type="submit" class="btn btn-primary mb-3" id="btnFilterClientByName">Filter</button>
-                </div>
-            </form>
+    <div class="row w-auto">
+        <div class="d-inline-flex col justify-content-end">
+            <div class="col-sm-auto d-block p-1">
+                <label for="inp_FilterClientByName" class="text-white form-label-sm form-control-sm">Filter by Client:</label>
+            </div>
+            <div class="col-sm-4 p-1">
+                <input type="text" class="form-control form-control-sm" id="inputFilterClientByNameOrEmail" name="inputFilterClientByNameOrEmail" placeholder="Filter by Client Name or Email">
+            </div>
+            <div class="col-sm-auto p-1">
+                <form method="GET" id="frmFilterClient">
+                    <input type="submit" class="btn-primary form-control form-control-sm m-0 text-decoration-none" id="btnFilterClientByName" value="Filter" />
+                </form>
+            </div>
+            <div class="col-sm-auto p-1">
+                <a class="btn-danger form-control form-control-sm m-0 text-decoration-none" asp-controller="Client" asp-action="NewClient">New Client</a>
+            </div>
         </div>
-        <div class="col-auto">
-            <a class="btn btn-danger form-control m-0" asp-area="" asp-controller="Client" asp-action="NewClient">New Client</a>
+    </div>
+    <div class="row w-auto">
+        <div class="d-inline-flex col justify-content-end">
+            <div class="col-sm-auto d-block p-1">
+                <label for="inp_FilterOrderByClient" class="text-white form-label-sm">Total de Itens: <span class="badge rounded-pill bg-danger" id="spTotalItems">@ViewBag.TotalItems</span></label>
+            </div>
         </div>
     </div>
 </div>
+<table class="table table-hover">
+    <tbody>
+        <tr>
+            <td class="text-white fw-bold text-center" style="background-color:dimgray;width:280px">Name</td>
+            <td class="text-white fw-bold text-center" style="background-color:#848b83;width:280px">Email</td>
+            <td class="text-white fw-bold text-center" style="background-color:#848b83;width:200px">Telephone</td>
+            <td class="text-white fw-bold text-center" style="background-color:#848b83;width:200px">Data Register</td>
+            <td class="text-white fw-bold w-auto text-center" style="background-color:#848b83;width:200px"></td>
+        </tr>
+    </tbody>
+</table>
 
 <div id="lstClients">
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th colspan="5" class="text-center"></th>
-            </tr>
-        </thead>
+    <table class="table table-sm table-bordered" id="tbl">
         <tbody>
-            <tr>
-                <td class="text-center">Name</td>
-                <td class="text-center">Email</td>
-                <td class="text-center">Telephone</td>
-                <td class="text-center">Data Register</td>
-                <td class="text-center"></td>
-            </tr>
             @foreach (Client client in @ViewBag.ListAllClients)
             {
+                Int32 ClientId = client.Id;
+                String ClientName = @client?.Name ?? String.Empty;
+                String ClientEmail = @client?.Email ?? String.Empty;
+                String ClientTelephone = @client?.Telephone ?? String.Empty;
+                DateTime? ClientDateRegister = @client?.DateRegister??new DateTime();
+
                 <tr>
-                    <td>@client.Name</td>
-                    <td>@client.Email</td>
-                    <td>@client.Telephone??""</td>
-                    <td>@client.DateRegister</td>
-                    <td class="p-2">
-                        <div class="row justify-content-center">
-                            <div class="col-sm-4">
-                                <form method="POST" action="/Client/UpdateClient?Id=@client.Id">
-                                    <input type="submit" value="Edit" class="btn btn-info form-control-sm" />
+                    <td class="text-center" style="width:320px;">@ClientName</td>
+                    <td class="text-center" style="width:320px;">@ClientEmail</td>
+                    <td class="text-center" style="width:150px;">@ClientTelephone</td>
+                    <td class="text-center" style="width:250px;">@ClientDateRegister</td>
+                    <td class="p-2 text-center" style="width:150px;">
+                        <div class="d-inline-flex col align-content-center">
+                            <div class="col-sm-auto p-1">
+                                <form method="post" action="/Client/UpdateClient?Id=@ClientId">
+                                    <input type="submit" value="Update" class="btn-primary form-control form-control-sm m-0 text-decoration-none" />
                                 </form>
                             </div>
-                            <div class="col-sm-4">
-                                <form method="post" action="/Client/Delete?Id=@client.Id">
-                                    <input type="submit" value="Delete" class="btn btn-danger form-control-sm " />
+                            <div class="col-sm-auto p-1">
+                                <form method="post" action="/Client/Delete?Id=@ClientId">
+                                    <input type="submit" value="Delete" class="btn-danger form-control form-control-sm m-0 text-decoration-none" />
                                 </form>
                             </div>
                         </div>
@@ -64,87 +75,5 @@
                 </tr>
             }
         </tbody>
-        <tfoot>
-            <tr>
-                <th colspan="5" class="text-end">Total de Itens: @ViewBag.TotalItems</th>
-            </tr>
-        </tfoot>
     </table>
 </div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script language="javascript" type="text/javascript">
-    $(document).ready(function () {
-
-        $("#frmFilterClient").submit(function (event) {
-            event.preventDefault();
-
-            $.ajax({
-                url: "/Client/ListClients/Filter?name=" + encodeURIComponent($("#inputFilterClientByNameOrEmail").val() ?? ""),
-                method: "GET",
-                success: function (data) {
-                    $("#lstClients").empty();
-
-                    var tbl = '<table class="table table-hover" id = "tbl">';
-                    tbl += '<thead>';
-                    tbl += '    <tr>';
-                    tbl += '        <th colspan="5" class="text-center"></th>';
-                    tbl += '    </tr>';
-                    tbl += '</thead>';
-                    tbl += '   <tbody>'
-                    tbl += '        <tr>';
-                    tbl += '             <td class="text-center">Name </td>';
-                    tbl += '             <td class="text-center">Email </td>';
-                    tbl += '             <td class="text-center">Telephone </td>';
-                    tbl += '             <td class="text-center">Data Register</td>';
-                    tbl += '             <td class="text-center"></td>';
-                    
-                    tbl += '        </tr>';
-                    var TotalItems = 0;
-
-                    data.forEach(function (client) {
-                        tbl += '    <tr>';
-                        tbl += '        <td>' + client.name + '</td>';
-                        tbl += '        <td>' + client.email + '</td>';
-                        tbl += '        <td class="text-center">' + client.telephone + '</td>';
-                        tbl += '        <td class="text-center">' + client.dataregister + '</td>';
-
-                        tbl += '<td class="p-2">';
-                        tbl += '    <div class="row justify-content-center">';
-                        tbl += '        <div class="col-sm-4">';
-                        tbl += '            <form method="post" action="/Client/Update" >';
-                        tbl += '                <input type="hidden" value = "' + client.Id + '" name = "IdEdit" id = "inputHiddenEditClientId" />';
-                        tbl += '                    <input type="submit" value = "Edit" class="btn btn-info form-control-sm" />';
-                        tbl += '             </form>';
-                        tbl += '         </div>';
-                        tbl += '         <div class="col-sm-4" >';
-                        tbl += '             <form method="post" action = "/Product/Delete">';
-                        tbl += '                 <input type="hidden" value = "' + client.Id + '" name = "IdDelete" id = "inputHiddenDeleteClientId" />';
-                        tbl += '                 <input type="submit" value = "Delete" class="btn btn-danger form-control-sm" />';
-                        tbl += '             </form>';
-                        tbl += '        </div>';
-                        tbl += '    </div>';
-                        tbl += '</td>';
-
-                        tbl += '    </tr>';
-
-                        TotalItems++;
-                    })
-
-                    tbl += '  </tbody>';
-                    tbl += '    <tfoot>';
-                    tbl += '     <tr>';
-                    tbl += '         <th colspan="5" class="text-end"> Total de Itens: ' + TotalItems + '</th>';
-                    tbl += '     </tr>';
-                    tbl += '  </tfoot>';
-                    tbl += '  </table>';
-                    
-                    $("#lstClients").html(tbl)
-                },
-                error: function (xhr, status, error) {
-                    console.error('Erro na requisição:', error);
-                }
-            });
-
-        });
-    });
-</script>

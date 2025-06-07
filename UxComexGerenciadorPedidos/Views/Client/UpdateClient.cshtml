@@ -4,7 +4,6 @@
     String ClientName = Model?.Name ?? "";
     String ClientEmail = Model?.Email ?? "";
     String ClientTelephone = Model?.Telephone ?? "";
-
 }
 <div>
     <div class="container w-50 p-0">
@@ -19,7 +18,7 @@
                     <label for="inputClientId" class="form-label">Client Id:</label>
                 </div>
                 <div class="col-sm-8">
-                    <input type="text" class="form-control" value="@ClientId" id="inputClientId" disabled>
+                    <input type="text" class="form-control" value="@ClientId" id="txtClientId" disabled>
                 </div>
             </div>
 
@@ -31,7 +30,7 @@
                     <label for="formGroupExampleInput2" class="form-label">Full Name:</label>
                 </div>
                 <div class="col-sm-8">
-                    <input type="text" class="form-control" placeholder="Full Name" aria-label="Full Name" value="@ClientName" />
+                    <input type="text" class="form-control" placeholder="Full Name" aria-label="Full Name" value="@ClientName" id="txtClientName" />
                 </div>
             </div>
 
@@ -43,7 +42,7 @@
                     <label for="formGroupExampleInput2" class="form-label">E-mail:</label>
                 </div>
                 <div class="col-sm-8">
-                    <input type="email" class="form-control" placeholder="E-mail" aria-label="E-mail" value="@ClientEmail"/>
+                    <input type="email" class="form-control" placeholder="E-mail" aria-label="E-mail" value="@ClientEmail" id="txtClientEmail" />
                 </div>
             </div>
 
@@ -55,7 +54,7 @@
                     <label for="formGroupExampleInput2" class="form-label">Telephone:</label>
                 </div>
                 <div class="col-sm-8">
-                    <input type="tel" class="form-control" placeholder="Telephone" aria-label="Telephone" value="@ClientTelephone" />
+                    <input type="tel" class="form-control" placeholder="Telephone" aria-label="Telephone" value="@ClientTelephone" id="txtClientTelephone" />
                 </div>
             </div>
 
@@ -63,6 +62,37 @@
     </div>
     <br />
     <div class="container border border-1 w-50 p-2 text-center">
-        <input type="submit" class="form-control btn btn-danger w-25" value="Save" />
+        <form method="post" id="frmSaveClient">
+            <input type="submit" class="form-control btn btn-danger w-25" value="Save" />
+        </form>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        //$("#txtProductId :disabled").css("")
+        $("#frmSaveClient").submit(function (event) {
+            event.preventDefault();
+    
+            var clientId = @Model?.Id;
+            var clientName = $("#txtClientName").val();
+            var clientEmail = $("#txtClientEmail").val();
+            var clientTelephone = $("#txtClientTelephone").val();
+
+            $.ajax({
+                url: "/Client/Update",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ id: clientId, name: clientName, email: clientEmail, telephone: clientTelephone }),
+                success: function (data) {
+
+                },
+                error: function (xhr, status, error) {
+                    console.log('Erro na requisição:' + error);
+                }
+            });
+
+        });
+    });
+</script>

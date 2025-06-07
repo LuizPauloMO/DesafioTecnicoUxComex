@@ -17,36 +17,51 @@ namespace UxComexGerenciadorPedidos.Domain.Business
         }
         public List<Client>? ListAll()
         {
-            return ctx.ReadAll();
+            return ctx.List();
         }
 
         public List<Client>? ListByName(String name)
         {
-            return ctx.ReadAll()?.Where(p => p.Name == name).ToList();
+            return ctx.List()?
+                             .Where(p => p.Name == name)
+                             .ToList();
         }
 
         public Client? GetById(Int32 Id)
         {
-            return ctx.ReadById(Id);
+            return ctx.GetById(Id);
         }
 
         public List<Client>? ListAllInOrderByAsc()
         {
-            return ListAll()?.OrderBy(p => p.Name).ToList();
+            return ListAll()?
+                            .OrderBy(p => p.Name)
+                            .ToList();
         }
 
         public List<Client>? ListAllInOrderByDesc()
         {
-            return ListAll()?.OrderByDescending(p => p.Name).ToList();
+            return ListAll()?
+                            .OrderByDescending(p => p.Name)
+                            .ToList();
         }
-        public async Task New(Client? client)
+        public void New(Client? client)
         {
             if (client != null)
             {
-                Client? client_ = ctx.ReadAll()?.Where(p => p.Name == client.Name).FirstOrDefault();
+                Client? client_ = ctx.List()?
+                                            .Where(p => p.Name == client.Name)
+                                            .FirstOrDefault();
                 if (client_ == null)
                 {
-                   await ctx.Add(client);
+                    try
+                    {
+                        ctx.Add(client);
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }                  
                 }
             }
         }
@@ -55,7 +70,14 @@ namespace UxComexGerenciadorPedidos.Domain.Business
         {
             if (Id > 0)
             {
-                await ctx.Delete(Id);
+                try
+                {
+                    await ctx.Delete(Id);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }                
             }
         }
 
@@ -63,11 +85,18 @@ namespace UxComexGerenciadorPedidos.Domain.Business
         {
             if (client != null)
             {
-                Client? cli = ctx.ReadById(client.Id);
+                Client? cli = ctx.GetById(client.Id);
 
                 if (cli != null)
                 {
-                   await ctx.Update(client);
+                    try
+                    {
+                        await ctx.Update(client);
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }                   
                 }
             }
         }

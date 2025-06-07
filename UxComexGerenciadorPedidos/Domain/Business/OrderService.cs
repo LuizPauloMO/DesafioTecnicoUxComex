@@ -12,78 +12,66 @@ namespace UxComexGerenciadorPedidos.Domain.Business
     public class OrderService
     {
         private readonly IUxComexServiceDB<Order> ctxOrder;
-        private readonly IUxComexServiceDB<OrderItem> ctxOrderItem;
         private readonly ClientService clientService;
         private readonly ProductService productService;
-        private readonly List<OrderItem> items;
+        private readonly OrderItemService orderItemService;
+
         public List<Product>? Products { get; }
         public List<Client>? Clients { get; }
-        public List<OrderItem> OrderItems { get; }
-        public Decimal ValueTotal { get; set; }
-        public OrderService(IConfiguration configuration, ClientService clientService, ProductService productService)
+        public List<OrderItem> MenuItems { get; }
+        public Decimal TotalValue { get; set; }
+        public OrderService(IConfiguration configuration, ClientService clientService, ProductService productService, OrderItemService orderItemService)
         {
             this.ctxOrder = new OrderDb(configuration);
-            this.ctxOrderItem = new OrderItemDb(configuration);
             this.clientService = clientService;
             this.productService = productService;
-            this.items = new List<OrderItem>();
+            this.orderItemService = orderItemService;
+            this.MenuItems = new List<OrderItem>();
             this.Products = productService.ListAll();
             this.Clients = clientService.ListAll();
-            OrderItems = items;
         }
 
         #region C.R.U.D
         public List<Order>? ListAll()
         {
-            return ctxOrder.ReadAll();
-        }
-
-        public List<OrderItem>? ListOrderItems()
-        {
-            return this.OrderItems;
-        }
-
-        private List<OrderItem>? ListProductsByOrderId(int id)
-        {
-            return ListOrderItems()?
-                                   .Where(p => p.IdOrder == id)
-                                   .ToList();
+            return ctxOrder.List();
         }
 
         public List<Order>? ListOrderByDate(DateTime date)
         {
-            return ctxOrder.ReadAll()?.Where(p => p.DateOrder.ToShortDateString() == date.ToShortDateString()).ToList();
+            return ctxOrder.List()?.Where(p => p.DateOrder.ToShortDateString() == date.ToShortDateString()).ToList();
         }
 
-        public Order? ListById(Int32 Id)
+        public Order? GetById(Int32 Id)
         {
-            return ctxOrder.ReadById(Id);
+            return ctxOrder.GetById(Id);
         }
 
+        public List<OrderItem>? GetItemsOfOrder(Int32 Id)
+        {
+            List<OrderItem>? orderItems = null;
+            Order? order = ctxOrder.GetById(Id);
+            
+            if(order != null)
+            {
+                orderItems=orderItemService.List()?
+                                                  .Where(p=>p.IdOrder==order.Id)
+                                                  .ToList();
+            }
 
+            return orderItems;
+        }
         public void Delete(Int32 Id)
         {
-            Int32 orderItemId = 0;
-            Order? order_ = ctxOrder.ReadById(Id);
-            if (order_ != null)
+            bool IsDeleteAllOrderItemsInCascade = true;
+            Order? order = ctxOrder.GetById(Id);
+            if (order != null)
             {
-                OrderItem? orderItem = ctxOrderItem.ReadAll()?
-                                                 .Where(p => p.IdOrder == order_.Id)
-                                                 .FirstOrDefault();
+                IsDeleteAllOrderItemsInCascade = orderItemService.DeleteInCascade(order.Id);
 
-                if (orderItem != null)
+                if (IsDeleteAllOrderItemsInCascade)
                 {
-                    orderItemId = orderItem.Id;
-                    ctxOrderItem.Delete(orderItemId);
-                }
-
-                orderItem = ctxOrderItem.ReadAll()?
-                                        .Where(p => p.IdOrder == orderItemId)
-                                        .FirstOrDefault();
-
-                if (orderItem == null)
-                {
-                    ctxOrder.Delete(order_.Id);
+                    ctxOrder.Delete(order.Id);
                 }
             }
         }
@@ -92,7 +80,7 @@ namespace UxComexGerenciadorPedidos.Domain.Business
         {
             if (order != null)
             {
-                Order? order_ = ctxOrder.ReadById(order.Id);
+                Order? order_ = ctxOrder.GetById(order.Id);
                 if (order_ != null)
                 {
                     ctxOrder.Update(order);
@@ -121,76 +109,92 @@ namespace UxComexGerenciadorPedidos.Domain.Business
             return OrderStatus.NEW;
         }
 
-        public void ChangeOrderStatus(Order order, OrderStatus orderStatus)
+        public void AlterOrderStatus(Order order, OrderStatus orderStatus)
         {
-            try
+            Order? order_ = this.ctxOrder.GetById(order.Id);
+            if (order_ != null)
             {
-                order.Status = orderStatus;
-                ctxOrder.Update(order);
+                try
+                {
+                    order.Status = orderStatus;
+                    ctxOrder.Update(order);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
             }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-        public void IncludeItemInMyOrder(OrderItem orderItem)
-        {
-            items.Add(orderItem);         
         }
 
-        public void CalculateTotalValue()
+        public void IncludeItemToOrderMenu(OrderItem orderItem)
+        {
+            //if (orderItem != null)
+                MenuItems.Add(orderItem);
+        }
+
+        public Decimal CalculateTotalValueOfMenu()
         {
             Decimal total = new decimal(0.0);
 
-            foreach (OrderItem item in items)
+            foreach (OrderItem item in MenuItems)
             {
                 total += item.UnityPrice * item.Quantity;
             }
 
-            this.ValueTotal= total;
+            this.TotalValue = total;
+            return this.TotalValue;
         }
 
-        public void Save(Client client)
+        public async Task Save(Client client)
         {
             Client? cli = clientService.GetById(client.Id);
 
             if (cli != null)
             {
                 Int32 OrderId = 0;
-
+                Order order = new Order();
+                order.IdClient = cli.Id;
+                order.DateOrder = DateTime.Now;
+                order.Status = OrderStatus.NEW;
+                order.TotalValue = this.TotalValue;
+                bool OrderCreatedWithSuccess = false;
                 try
-                {
-                    OrderId = ctxOrder.GetLastID();
-                    Order order = new Order();
-                    order.IdClient = cli.Id;
-                    order.DateOrder = DateTime.Now;
-                    order.Status = OrderStatus.NEW;
-                    order.ValueTotal = this.ValueTotal;
-
+                {                  
                     ctxOrder.Add(order);
+                    OrderCreatedWithSuccess = true;
                 }
                 catch (Exception)
                 {
-                    OrderId = 0;
                     throw;
                 }
 
-                Order? orderNew = ctxOrder.ReadById(OrderId+1);
-
-                if (orderNew != null)
+                if (OrderCreatedWithSuccess)
                 {
-                    foreach (OrderItem item in items)
-                    {
-                        item.IdOrder = orderNew.Id;
+                    OrderId = ctxOrder.GetLastID();
 
-                        try
+                    Order? orderNew = ctxOrder.GetById(OrderId);
+
+                    if (orderNew != null)
+                    {
+                        foreach (OrderItem item in MenuItems)
                         {
-                            ctxOrderItem.Add(item);
+
+                            item.IdOrder = orderNew.Id;
+
+                            try
+                            {
+                                orderItemService.Add(item);
+                                await productService.RemoveProductOfStock(item.IdProduct, item.Quantity);
+                            }
+                            catch (Exception)
+                            {
+                                throw;
+                            }
                         }
-                        catch (Exception)
-                        {
-                            throw;
-                        }
+
+                        orderNew.TotalValue = orderItemService.RecalculateTotalValueOfOrderItems();
+
+                        await ctxOrder.Update(orderNew);
                     }
                 }
             }
@@ -198,7 +202,7 @@ namespace UxComexGerenciadorPedidos.Domain.Business
 
         public void Clear()
         {
-            this.items.Clear();
+            MenuItems.Clear();
         }
     }
 }

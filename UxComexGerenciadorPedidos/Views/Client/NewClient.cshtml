@@ -46,33 +46,3 @@
         <input type="submit" class="form-control btn btn-danger" value="Save" />
     </div>
 </form>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script language="javascript" type="text/javascript">
-    $(document).ready(function () {
-
-        $("#frmNewClient").submit(function (event) {
-            event.preventDefault();
-
-            var json = {
-                name: $("#inputClientFullName").val(),
-                email: $("#inputClientEmail").val(),
-                telephone: $("#inputClientTelephone").val()
-            };
-            alert(JSON.stringify(json))
-
-            $.ajax({
-                url: "/Client/New",
-                method: "POST",
-                contentType: "application/json",
-                data: JSON.stringify(json),
-                success: function (data) {
-                    console.log(JSON.stringify(data));
-                },
-                error: function () {
-
-                }
-            });
-        });
-    });
-</script>

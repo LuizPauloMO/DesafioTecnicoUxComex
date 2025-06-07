@@ -1,9 +1,10 @@
 ﻿@using UxComexGerenciadorPedidos.Domain.Entities
 @using UxComexGerenciadorPedidos.Domain.Business
+
 <div class="container w-100">
     <div class="container border border-1 p-2 bg-dark">
         <div class="col-sm-auto d-block p-1">
-            <h1 class="display-6 text-danger text-center">Include items in the Order</h1>
+            <h1 class="display-6 text-danger text-center">Update the Order</h1>
         </div>
         <div class="row w-auto">
             <div class="d-inline-flex col justify-content-end">
@@ -11,10 +12,7 @@
                     <div class="d-inline-flex col justify-content-end">
                         <div class="col-sm-auto d-block p-1">
                             <label for="inp_FilterOrderByClient" class="text-white form-label">
-                                Total: <span class="badge rounded-pill bg-danger fs-5 " id="vlTotal"></span>&nbsp;
-                            </label>
-                            <label for="inp_FilterOrderByClient" class="text-white form-label">
-                                <span id="quantityOfItems"></span>
+                                Total: <span class="badge rounded-pill bg-danger fs-5" id="vlTotal"></span><br /><br /><span id="quantityOfItems"></span>
                             </label>
                         </div>
                     </div>
@@ -23,42 +21,32 @@
         </div>
     </div>
 
-    <div class="container border border-1 p-4" style="background-color:#303030;">
+    <div class="container border border-1 p-4" style="background-color:#606060;">
         <form class="row g-3 align-content-center" id="frmNewOrder">
             <div class="row justify-content-start">
                 <div class="col-auto justify-content-center d-flex flex-column align-items-start">
-                    <label for="cmbClients" class="form-label text-white fw-bold">Client:</label>
+                    <label for="cmbClients" class="form-label">Client: </label>
                 </div>
-                <div class="col-sm-5 justify-content-start p-0">
-                    <select class="form-select form-select-sm text-white" style="background-color:navy" aria-label=".form-select-sm example" id="cmbClients">
-                        <option value="0" class="text-white text-center" selected>.:: Select a Client from the list  ::.</option>
-                        @foreach (Client client in ViewBag.ListOrderClients)
-                        {
-                            <option value="@client.Id">@client.Name</option>
-                        }                      
-                    </select>                   
+                <div class="col-md-5 justify-content-center">
+                    <input type="number" class="form-control form-control-sm" id="txtOrderClientName" value="Client Name" />
                 </div>
-                <label id="lblClientError" class="label form-label-sm text-danger text-start" style="font-size:12px;">*Error:</label>
             </div>
 
-            <div class="col-sm-5 justify-content-center">
-                <label for="txtProductName" class="form-label text-white">Product:</label>
-                <select class="form-select form-select-sm text-white" style="background-color:navy" aria-label=".form-select-sm example" id="cmbProducts">
-                    <option value="0" class="text-white text-center" selected>.:: Select a Product from the list  ::.</option>
+            <div class="col-md-5 justify-content-center">
+                <label for="txtProductName" class="form-label">Products</label>
+                <select class="form-select form-select-sm mb-3" aria-label=".form-select-lg example" id="cmbProducts">
                     @foreach (Product product in ViewBag.ListOrderProducts)
                     {
                         <option value="@product.Id">@product.Name</option>
                     }
                 </select>
-                <label id="lblProductError" class="label form-label-sm text-danger text-start" style="font-size:12px;">*Error:</label>
             </div>
-            <div class="col-sm-3 justify-content-center p-0">
-                <label for="inputQuantity" class="form-label text-white">Quantity:</label>
-                <input type="number" class="form-control form-control-sm" id="inputQuantity" min="1" value="1">
-                <label id="lblQuantityError" class="label form-label-sm text-danger text-start" style="font-size:12px;">*Error:</label>
+            <div class="col-md-3 justify-content-center">
+                <label for="inputQuantity" class="form-label">Quantity</label>
+                <input type="number" class="form-control form-control-sm" id="inputQuantity">
             </div>
-            <div class="col-sm-3 justify-content-center">
-                <label for="" class="form-label"><br/></label>
+            <div class="col-md-3 justify-content-center">
+                <label for="inputQuantity" class="form-label"><br /></label>
                 <button type="submit" class="btn-primary form-control form-control-sm">Insert</button>
             </div>
         </form>
@@ -73,7 +61,7 @@
             </tr>
         </tbody>
     </table>
-    <div id="pnlOrderItems" class="overflow-scroll overflow-hidden border-1" style="height:400px;">
+    <div id="pnlOrderItems" class="overflow-auto overflow-hidden border-1" style="height:400px;">
         <table class="table table-bordered">
             <tbody>
                 @{
@@ -81,17 +69,19 @@
                     Int32 QuantityOfItems = 0;
                     Decimal TotalValue = ViewBag.TotalValueOrder ?? new Decimal(0.0);
                 }
-                @foreach (OrderItem item in ViewBag.ListItemsOfMenu)
+                @if (ViewBag.ListItemsOfMenu != null)
                 {
-                    Product? product = products.Where(p => p.Id == item.IdProduct).FirstOrDefault();
+                    @foreach (OrderItem item in ViewBag.ListItemsOfMenu)
+                    {
+                        Product? product = products.Where(p => p.Id == item.IdProduct).FirstOrDefault();
 
-                    <tr>
-                        <td class="text-center w-50">@product?.Name<input type="hidden" id="inputHiddenProductPrice" value="@product?.Price??0.0" /></td>
-                        <td class="text-center w-25">@item.Quantity</td>
-                        <td class="text-center w-25">@item.UnityPrice</td>
-                    </tr>
-                    QuantityOfItems++;
-                }
+                        <tr>
+                            <td class="text-center w-50">@product?.Name<input type="hidden" id="inputHiddenProductPrice" value="@product?.Price??0.0" /></td>
+                            <td class="text-center w-25">@item.Quantity</td>
+                            <td class="text-center w-25">@item.UnityPrice</td>
+                        </tr>
+                        QuantityOfItems++;
+                    }}
             </tbody>
         </table>
     </div>
@@ -109,13 +99,6 @@
 
         $("#vlTotal").text('@TotalValue.ToString("C2")');
         $("#quantityOfItems").text('Quantity of Items: @QuantityOfItems');
-        $("#lblQuantityError").text("");
-        $("#lblClientError").text("");
-        $("#lblProductError").text("");
-
-        $("#inputQuantity").click(function () {
-            $("#lblQuantityError").text("");
-        });
 
         $("#frmNewOrder").submit(function (event) {
             event.preventDefault();
@@ -160,9 +143,9 @@
                         $("#quantityOfItems").text('Quantity of Items: ' + TotalItems);
                     }
                     else {
-                        $("#lblQuantityError").text("*The quantity " + data.quantity + " of ''" + data.productName + "'' not available in Stock")
+                        alert("The quantity " + data.quantity + " of ''" + data.productName + "'' not available in Stock")
                     }
-                },               
+                },
                 error: function (error) {
                     console.log(error);
                 }
@@ -184,8 +167,6 @@
                 error: function (error) {
                     console.log(error);
                 }
-            }).done(function () {
-                window.location.href = "/Order/ListOrders";
             })
         });
     });

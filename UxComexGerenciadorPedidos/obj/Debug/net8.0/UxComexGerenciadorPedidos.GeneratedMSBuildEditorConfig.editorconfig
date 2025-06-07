@@ -54,8 +54,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJcTmV3T3JkZXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/Projetos/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Product/EditProduct.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdFxFZGl0UHJvZHVjdC5jc2h0bWw=
+[D:/Projetos/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Order/UpdateOrder.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJcVXBkYXRlT3JkZXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/Projetos/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Product/ListProducts.cshtml]
@@ -64,6 +64,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [D:/Projetos/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Product/NewProduct.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdFxOZXdQcm9kdWN0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Projetos/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Product/UpdateProduct.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdFxVcGRhdGVQcm9kdWN0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/Projetos/DesafioTecnicoUxComex/UxComexGerenciadorPedidos/Views/Shared/Error.cshtml]

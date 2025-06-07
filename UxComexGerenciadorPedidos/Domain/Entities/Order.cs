@@ -7,7 +7,7 @@ namespace UxComexGerenciadorPedidos.Domain.Entities
         public int Id { get; set; }
         public int IdClient { get; set; }
         public DateTime DateOrder { get; set; }
-        public Decimal ValueTotal { get; set; } = Convert.ToDecimal(0.0);
+        public Decimal TotalValue { get; set; } = Convert.ToDecimal(0.0);
         public uxComexEnumerations.OrderStatus Status { get; set; }
        
         public String PrintStatus()
